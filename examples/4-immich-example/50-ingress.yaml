@@ -1,10 +1,10 @@
-# Public entry point: https://immich.dani.sapi.click -> Service immich-server:2283
+# Public entry point: https://immich.szabi.sapi.click -> Service immich-server:2283
 #
 # Nothing cluster-specific is needed here:
 #   * TLS  -- no secret and no ACME annotation: Traefik auto-issues a certificate
 #             for this host via the entrypoint resolver (manifests/10-*).  The
 #             *.sapi.click wildcard (manifests/11-*) is only the fallback and does
-#             NOT cover this two-level host (immich.dani.sapi.click).
+#             NOT cover this two-level host (immich.szabi.sapi.click).
 #   * DNS  -- external-dns publishes the A record automatically.  A
 #             MutatingAdmissionPolicy (manifests/13-tenant-dns-policy.yaml.tpl)
 #             injects the `external-dns.kubernetes.io/target` annotation into
@@ -14,13 +14,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: immich
-  namespace: dani
+  namespace: szabi
   labels:
     app.kubernetes.io/part-of: immich
 spec:
   ingressClassName: traefik
   rules:
-    - host: immich.dani.sapi.click
+    - host: immich.szabi.sapi.click
       http:
         paths:
           - path: /
@@ -32,4 +32,4 @@ spec:
                   number: 2283
   tls:
     - hosts:
-        - immich.dani.sapi.click
+        - immich.szabi.sapi.click

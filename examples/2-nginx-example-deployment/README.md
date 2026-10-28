@@ -1,13 +1,13 @@
 # 2-nginx-example-deployment - the same nginx, owned by a Deployment
 
 ```
-   https://deploy.dani.sapi.click ──► Ingress nginx-deploy ──► Service nginx-deploy:80 ──► Pod (owned by Deployment nginx)
+   https://deploy.szabi.sapi.click ──► Ingress nginx-deploy ──► Service nginx-deploy:80 ──► Pod (owned by Deployment nginx)
 ```
 
 ## Apply
 
 ```sh
-export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/dani.kubeconfig
+export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/szabi.kubeconfig
 kubectl apply -f /k8s/20261016-k8s/examples/2-nginx-example-deployment/
 ```
 
@@ -15,7 +15,7 @@ kubectl apply -f /k8s/20261016-k8s/examples/2-nginx-example-deployment/
 
 ```sh
 kubectl get deploy,pods
-curl -I https://deploy.dani.sapi.click      # expect HTTP/2 200
+curl -I https://deploy.szabi.sapi.click      # expect HTTP/2 200
 ```
 
 ## Why prefer this over a bare Pod

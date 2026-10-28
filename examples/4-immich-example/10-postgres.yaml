@@ -12,7 +12,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-postgres-data
-  namespace: dani
+  namespace: szabi
   labels:
     app.kubernetes.io/part-of: immich
 spec:
@@ -25,7 +25,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-  namespace: dani
+  namespace: szabi
   labels:
     app: postgres
     app.kubernetes.io/part-of: immich
@@ -108,7 +108,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  namespace: dani
+  namespace: szabi
   labels:
     app: postgres
     app.kubernetes.io/part-of: immich

@@ -1,13 +1,13 @@
 # 3-nginx-example-replicaset - nginx owned by a ReplicaSet
 
 ```
-   https://replicaset.dani.sapi.click ──► Ingress nginx-rs ──► Service nginx-rs:80 ──► 2 Pods (owned by ReplicaSet nginx)
+   https://replicaset.szabi.sapi.click ──► Ingress nginx-rs ──► Service nginx-rs:80 ──► 2 Pods (owned by ReplicaSet nginx)
 ```
 
 ## Apply
 
 ```sh
-export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/dani.kubeconfig
+export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/szabi.kubeconfig
 kubectl apply -f /k8s/20261016-k8s/examples/3-nginx-example-replicaset/
 ```
 
@@ -16,7 +16,7 @@ kubectl apply -f /k8s/20261016-k8s/examples/3-nginx-example-replicaset/
 ```sh
 kubectl get rs
 kubectl get pods -l app=nginx-rs
-curl -I https://replicaset.dani.sapi.click      # expect HTTP/2 200
+curl -I https://replicaset.szabi.sapi.click      # expect HTTP/2 200
 ```
 
 It asks for **two** replicas, so two Pods come up. Delete one and the ReplicaSet

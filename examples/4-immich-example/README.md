@@ -1,6 +1,6 @@
-# 4-immich-example - Immich on `immich.dani.sapi.click`
+# 4-immich-example - Immich on `immich.szabi.sapi.click`
 
-A small, self-contained Immich deployment for the `dani` tenant namespace,
+A small, self-contained Immich deployment for the `szabi` tenant namespace,
 translated from the official
 [`docker-compose.yml`](https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml)
 (release channel) into plain Kubernetes manifests. It uses this cluster's
@@ -13,7 +13,7 @@ and a **Deployment** for PostgreSQL.
                  Internet
                     │  HTTPS (Traefik, per-host cert)
                     ▼
-   Immich Ingress ── immich.dani.sapi.click ──► Service immich-server:2283
+   Immich Ingress ── immich.szabi.sapi.click ──► Service immich-server:2283
                                                      │
                        ┌─────────────────────────────┼──────────────────────────┐
                        ▼                             ▼                          ▼
@@ -25,11 +25,11 @@ and a **Deployment** for PostgreSQL.
 
 ## Apply
 
-You only need the tenant kubeconfig (it already defaults to the `dani`
+You only need the tenant kubeconfig (it already defaults to the `szabi`
 namespace and owns everything below):
 
 ```sh
-export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/dani.kubeconfig
+export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/szabi.kubeconfig
 kubectl apply -f /k8s/20261016-k8s/examples/4-immich-example/
 ```
 
@@ -41,7 +41,7 @@ order, so the Secret and PVCs exist before the Pods that use them.
 > out-of-band and apply only the rest:
 >
 > ```sh
-> kubectl create secret generic immich-secrets -n dani \
+> kubectl create secret generic immich-secrets -n szabi \
 >   --from-literal=DB_PASSWORD="$(openssl rand -hex 16)"
 > ```
 >
@@ -56,14 +56,14 @@ kubectl get pvc
 kubectl logs -f deploy/immich-server
 ```
 
-Then open **https://immich.dani.sapi.click** and create the first admin account.
+Then open **https://immich.szabi.sapi.click** and create the first admin account.
 
 DNS is automatic: external-dns watches the `sapi.click` zone and a
 MutatingAdmissionPolicy injects the `external-dns.kubernetes.io/target`
 annotation into every Ingress in a tenant namespace, so the A record for
-`immich.dani.sapi.click` is published as soon as the Ingress exists (give it a
-minute: `dig +short immich.dani.sapi.click`). TLS is automatic too: Traefik issues
-a certificate for `immich.dani.sapi.click` - a two-label host the `*.sapi.click`
+`immich.szabi.sapi.click` is published as soon as the Ingress exists (give it a
+minute: `dig +short immich.szabi.sapi.click`). TLS is automatic too: Traefik issues
+a certificate for `immich.szabi.sapi.click` - a two-label host the `*.sapi.click`
 default wildcard does not cover.
 
 ## Files
@@ -75,14 +75,14 @@ default wildcard does not cover.
 | `20-redis.yaml` | Deployment + Service `redis` (Valkey 9, job queue, `emptyDir`) |
 | `30-machine-learning.yaml` | Deployment + Service `immich-machine-learning` (CLIP/face inference) |
 | `40-immich-server.yaml` | PVC (12Gi) + Deployment + Service `immich-server` (API + web UI + workers) |
-| `50-ingress.yaml` | Ingress for `immich.dani.sapi.click` → `immich-server:2283` |
+| `50-ingress.yaml` | Ingress for `immich.szabi.sapi.click` → `immich-server:2283` |
 
 ## Things to know
 
-* **Which tenant / host?** The namespace (`dani`) and host
-  (`immich.dani.sapi.click`) are hard-coded in each file. To run this for
+* **Which tenant / host?** The namespace (`szabi`) and host
+  (`immich.szabi.sapi.click`) are hard-coded in each file. To run this for
   another tenant, change `namespace:` in every file and `host:` in
-  `50-ingress.yaml` (`grep -rl dani .`).
+  `50-ingress.yaml` (`grep -rl szabi .`).
 * **Storage.** The two PVCs land on the cluster default StorageClass,
   `local-path` (k3s's local-path-provisioner): node-local and
   **ReadWriteOnce**. That is why both `immich-server` and `postgres` use

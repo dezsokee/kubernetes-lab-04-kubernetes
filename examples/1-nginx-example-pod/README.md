@@ -1,13 +1,13 @@
 # 1-nginx-example-pod - the same nginx, as a single bare Pod
 
 ```
-   https://pod.dani.sapi.click ──► Ingress nginx-pod ──► Service nginx-pod:80 ──► Pod nginx:80
+   https://pod.szabi.sapi.click ──► Ingress nginx-pod ──► Service nginx-pod:80 ──► Pod nginx:80
 ```
 
 ## Apply
 
 ```sh
-export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/dani.kubeconfig
+export KUBECONFIG=/k8s/20261016-k8s/kubeconfigs/szabi.kubeconfig
 kubectl apply -f /k8s/20261016-k8s/examples/1-nginx-example-pod/
 ```
 
@@ -15,7 +15,7 @@ kubectl apply -f /k8s/20261016-k8s/examples/1-nginx-example-pod/
 
 ```sh
 kubectl get pod nginx
-curl -I https://pod.dani.sapi.click          # expect HTTP/2 200
+curl -I https://pod.szabi.sapi.click          # expect HTTP/2 200
 ```
 
 ## The catch
