@@ -1,0 +1,66 @@
+# Section 6.6: my own image from Lab 3 (C# / ASP.NET pastebin), pulled from the
+# PRIVATE repository szabolcsdezso64532/myapp with the dockerhub-pull secret.
+#
+# https://myapp.szabi.sapi.click
+#   GET  /         -> {"service":"pastebin-csharp","docs":"/swagger"}
+#   GET  /health   -> {"status":"ok"}
+#   POST /paste    -> {"url":"https://..."} -> short code
+#
+# Pastes are kept in memory, so keep replicas at 1.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: szabi
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: myapp } }
+  template:
+    metadata: { labels: { app: myapp } }
+    spec:
+      imagePullSecrets: [{ name: dockerhub-pull }]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: myapp
+          image: szabolcsdezso64532/myapp:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          readinessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests: { cpu: 25m, memory: 64Mi }
+            limits:   { cpu: 250m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: myapp, namespace: szabi }
+spec:
+  selector: { app: myapp }
+  ports: [{ port: 80, targetPort: 8080 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: { name: myapp, namespace: szabi }
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: myapp.szabi.sapi.click
+      http:
+        paths:
+          - { path: /, pathType: Prefix, backend: { service: { name: myapp, port: { number: 80 } } } }
+  tls:
+    - hosts: [ myapp.szabi.sapi.click ]
