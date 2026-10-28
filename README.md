@@ -428,6 +428,14 @@ kubectl auth can-i create deployments # am I even allowed?
    or `kubectl describe pod` showing the pull succeeded).
 4. Share the link in this repository.
 
+**Published app:** <https://myapp.szabi.sapi.click> (Swagger UI: <https://myapp.szabi.sapi.click/swagger>)
+
+| | |
+| --- | --- |
+| Manifest | [`myapp.yaml`](myapp.yaml) |
+| Image | `szabolcsdezso64532/myapp:latest` (private, `linux/amd64` + `linux/arm64`) |
+| Pull secret | `dockerhub-pull` in the `szabi` namespace |
+
 ---
 
 ## 9. Further reading
